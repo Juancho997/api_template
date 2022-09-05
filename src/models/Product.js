@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
-import { databaseInstance } from "../database/index.js";
+import databaseConfiguration from "../database/index.js";
 
-const Product = databaseInstance.define('products', {
+const Product = databaseConfiguration.databaseInstance.define('products', {
 
     id: {
         type: DataTypes.UUID,

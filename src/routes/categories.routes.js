@@ -48,7 +48,7 @@ const router = Router();
  *     tags: [Categories]
  *     responses:
  *       200:
- *          description: The list of the categories
+ *         description: The list of the categories
  *         content:     
  *           application/json:
  *             schema:
@@ -57,9 +57,6 @@ const router = Router();
  *                 $ref: '#/components/schemas/Category' 
  *       204:
  *          description: There are no categories loaded in the database 
- * 
- * 
- * 
  * 
 */
 
@@ -80,15 +77,15 @@ router.get('/', getCategories);
  *             type: string
  *           required: true
  *           description: The category's id.
- *       responses:
- *         200:
- *           description: The category description by id and it's products
- *           content:
- *             application/json:
- *               schema:
- *                 $ref: '#/components/schemas/Category'
- *         204:
- *           description: The category was not found.             
+ *    responses:
+ *      200:
+ *        description: The category description by id and it's products
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Category'
+ *      204:
+ *        description: The category was not found.             
  */
 
 

@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
-import { databaseInstance } from "../database/index.js";
+import databaseConfiguration from "../database/index.js";
 
-const Category = databaseInstance.define('categories', {
+const Category = databaseConfiguration.databaseInstance.define('categories', {
 
     id: {
         type: DataTypes.UUID,

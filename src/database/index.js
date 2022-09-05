@@ -1,13 +1,26 @@
 import { Sequelize } from "sequelize";
 
+const stage = 'testing';
 
-export const databaseInstance = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
-    host: `${process.env.DB_HOST}`,
-    dialect: `${process.env.DB_DIALECT}`,
-});
+let databaseInstance;
 
+if (stage === 'development') {
 
-export const connectDatabase = async () => {
+    databaseInstance = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
+        host: `${process.env.DB_HOST}`,
+        dialect: `${process.env.DB_DIALECT}`,
+    });
+
+} else if (stage === 'testing') {
+
+    databaseInstance = new Sequelize(`${process.env.DB_NAME_TESTING}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
+        host: `${process.env.DB_HOST}`,
+        dialect: `${process.env.DB_DIALECT}`,
+    });
+
+}
+
+const connectDatabase = async () => {
     try {
 
         await databaseInstance.authenticate();
@@ -33,4 +46,9 @@ export const connectDatabase = async () => {
 };
 
 
+const databaseConfiguration = {
+    databaseInstance,
+    connectDatabase
+};
 
+export default databaseConfiguration;

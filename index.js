@@ -5,7 +5,7 @@ import cors from 'cors';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 
-import { connectDatabase } from './src/database/index.js';
+import databaseConfiguration from './src/database/index.js';
 import router from './src/routes/index.routes.js';
 
 
@@ -47,7 +47,7 @@ server.use(router);
         server.listen(`${process.env.PORT}`, () => {
             console.log(`Server on port > ${process.env.PORT}`);
         });
-        connectDatabase();
+        databaseConfiguration.connectDatabase();
         return;
 
     } catch (error) {
