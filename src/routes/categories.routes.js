@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Category from "../models/Category.js";
+import { getCategories, getCategoryById, postCategory, modifyCategory, deleteCategory } from '../controllers/routes/categories.controllers.js';
 
 const router = Router();
 
@@ -48,24 +48,23 @@ const router = Router();
  *     tags: [Categories]
  *     responses:
  *       200:
- *         description: The list of the categories
+ *          description: The list of the categories
  *         content:     
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Category' 
- */
+ *       204:
+ *          description: There are no categories loaded in the database 
+ * 
+ * 
+ * 
+ * 
+*/
 
 
-router.get('/', async (req, res) => {
-    try {
-        const allCategories = await Category.findAll();
-        return res.json(allCategories);
-    } catch (error) {
-        console.error(error);
-    }
-});
+router.get('/', getCategories);
 
 
 /**
@@ -88,24 +87,12 @@ router.get('/', async (req, res) => {
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Category'
- *         404:
+ *         204:
  *           description: The category was not found.             
  */
 
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const foundCategory = await Category.findByPk(id, { include: ["products"] });
-
-        !foundCategory && res.status(404).json({ error: `There are no Categories with the id : ${id}` });
-
-        return res.json(foundCategory);
-
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.get('/:id', getCategoryById);
 
 
 /**
@@ -135,27 +122,7 @@ router.get('/:id', async (req, res) => {
  *        description: Something on the server went wrong. 
  */
 
-router.post('/', async (req, res) => {
-    const { name } = req.body;
-
-    try {
-
-        const categoryWithSameName = await Category.findOne({
-            where: {
-                name: name
-            }
-        });
-
-        if (!name) return res.status(400).json({ error: "Must provide all the required fields" });
-
-        categoryWithSameName && res.status(405).json({ error: `There's already a category with that name` });
-
-        const newCategory = await Category.create({ name });
-        return res.status(201).json(newCategory);
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.post('/', postCategory);
 
 
 /**
@@ -184,29 +151,14 @@ router.post('/', async (req, res) => {
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Category'
- *      404:
+ *      204:
  *        description: The category was not found.    
  *      500:
  *        description: Something on the server went wrong. * 
  */
 
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { body } = req;
-    try {
-        const foundCategory = await Category.findByPk(id);
-
-        !foundCategory && res.status(404).json({ error: `There are no Categories with the id : ${id}` });
-
-        await Category.update(body, { where: { id: id } });
-        const updatedCategory = await Category.findByPk(id);
-
-        return res.json(updatedCategory);
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.put('/:id', modifyCategory);
 
 /**
  * @swagger
@@ -224,29 +176,13 @@ router.put('/:id', async (req, res) => {
  *     responses:
  *       200:
  *         description: The category was successfully deleted.
- *       404:
+ *       204:
  *         description: The category was not found.
  *       500:
  *         description: Something on the server went wrong. *             
  */
 
 
-router.delete('/:id', async (req, res) => {
-
-    const { id } = req.params;
-    try {
-        const foundCategory = await Category.findByPk(id);
-
-        !foundCategory && res.status(404).json({ error: `There are no categories with the id : ${id}` });
-
-        await Category.destroy({ where: { id: id } });
-
-        return res.json({ msg: `Category ${foundCategory.name} - id : ${id} deleted` });
-
-    } catch (err) {
-        console.log(err)
-    }
-
-});
+router.delete('/:id', deleteCategory);
 
 export default router;

@@ -9,7 +9,7 @@ import { connectDatabase } from './src/database/index.js';
 import router from './src/routes/index.routes.js';
 
 
-const server = express();
+export const server = express();
 
 const swaggerOptions = {
     definition: {

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Product from "../models/Product.js";
+import { getProducts, getProductById, postProduct, modifyProduct, deleteProduct } from "../controllers/routes/products.controllers.js";
 
 const router = Router();
 
@@ -72,16 +72,11 @@ const router = Router();
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Product' 
+ *       204:
+ *         description : There are no products loaded in the database.  
  */
 
-router.get('/', async (req, res) => {
-    try {
-        const allProducts = await Product.findAll({ include: ["category"] });
-        return res.json(allProducts);
-    } catch (error) {
-        console.error(error);
-    }
-});
+router.get('/', getProducts);
 
 /**
  * @swagger
@@ -103,27 +98,11 @@ router.get('/', async (req, res) => {
  *             application/json:
  *               schema:
  *                 $ref: '#/components/schemas/Product'
- *         404:
+ *         204:
  *           description: The product was not found.             
  */
 
-router.get('/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-
-        const foundProduct = await Product.findOne({
-            include: 'category',
-            where: { id: id }
-        });
-
-        !foundProduct && res.status(404).json({ error: `There are no Products with the id : ${id}` });
-
-        return res.json(foundProduct);
-
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.get('/:id', getProductById);
 
 
 
@@ -155,29 +134,7 @@ router.get('/:id', async (req, res) => {
  */
 
 
-router.post('/', async (req, res) => {
-    const { name, image, description, price, categoryId } = req.body;
-
-    try {
-
-        const productWithSameName = await Product.findOne({
-            where: {
-                name: name
-            }
-        });
-
-        productWithSameName && res.status(405).json({ error: `There's already a product with that name` });
-
-        if (!name || !image || !description || !price || !categoryId) return res.status(400).json({ error: "Must provide all required fields" });
-
-
-        const newProduct = await Product.create({ name, image, description, price, categoryId });
-        return res.status(201).json(newProduct);
-
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.post('/', postProduct);
 
 
 /**
@@ -206,29 +163,14 @@ router.post('/', async (req, res) => {
  *          application/json:
  *            schema:
  *              $ref: '#/components/schemas/Product'
- *      404:
+ *      204:
  *        description: The product was not found.    
  *      500:
  *        description: Something on the server went wrong. * 
  */
 
 
-router.put('/:id', async (req, res) => {
-    const { id } = req.params;
-    const { body } = req;
-    try {
-        const foundProduct = await Product.findByPk(id);
-
-        !foundProduct && res.status(404).json({ error: `There are no Products with the id : ${id}` });
-
-        await Product.update(body, { where: { id: id } });
-        const updatedProduct = await Product.findByPk(id);
-
-        return res.json(updatedProduct);
-    } catch (error) {
-        console.error(error)
-    }
-});
+router.put('/:id', modifyProduct);
 
 
 /**
@@ -247,29 +189,13 @@ router.put('/:id', async (req, res) => {
  *     responses:
  *       200:
  *         description: The product was successfully deleted.
- *       404:
+ *       204:
  *         description: The product was not found.
  *       500:
  *         description: Something on the server went wrong. *             
  */
 
 
-router.delete('/:id', async (req, res) => {
-
-    const { id } = req.params;
-    try {
-        const foundProduct = await Product.findByPk(id);
-
-        !foundProduct && res.status(400).json({ error: `There are no Products with the id : ${id}` });
-
-        await Product.destroy({ where: { id: id } });
-
-        return res.json({ msg: `Product id : ${id} deleted` });
-
-    } catch (err) {
-        console.log(err)
-    }
-
-});
+router.delete('/:id', deleteProduct);
 
 export default router;
