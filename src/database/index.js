@@ -8,14 +8,14 @@ if (stage === 'development') {
 
     databaseInstance = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
         host: `${process.env.DB_HOST}`,
-        dialect: `${process.env.DB_DIALECT}`,
+        dialect: `${process.env.DB_DIALECT}`
     });
 
 } else if (stage === 'testing') {
 
     databaseInstance = new Sequelize(`${process.env.DB_NAME_TESTING}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
         host: `${process.env.DB_HOST}`,
-        dialect: `${process.env.DB_DIALECT}`,
+        dialect: `${process.env.DB_DIALECT}`
     });
 
 }
@@ -29,7 +29,9 @@ const connectDatabase = async () => {
 
         const { products, categories } = databaseInstance.models;
 
-        categories.hasMany(products);
+        categories.hasMany(products, {
+            onDelete: 'cascade'
+        });
 
         products.belongsTo(categories, {
             foreignKey: 'categoryId',

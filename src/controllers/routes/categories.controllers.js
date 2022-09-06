@@ -40,7 +40,7 @@ export async function postCategory(req, res) {
 
         if (!name) return res.status(400).json({ error: "Must provide all the required fields" });
 
-        categoryWithSameName && res.status(405).json({ error: `There's already a category with that name` });
+        if (categoryWithSameName) return res.status(405).json({ error: `There's already a category with that name` });
 
         const newCategory = await Category.create({ name });
         return res.status(201).json(newCategory);
@@ -76,7 +76,7 @@ export async function deleteCategory(req, res) {
 
         await Category.destroy({ where: { id: id } });
 
-        return res.json({ msg: `Category ${foundCategory.name} - id : ${id} deleted` });
+        return res.status(200).json({ msg: `Category ${foundCategory.name} - id : ${id} deleted` });
 
     } catch (err) {
         console.log(err)

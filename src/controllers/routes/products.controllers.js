@@ -43,7 +43,7 @@ export async function postProduct(req, res) {
             }
         });
 
-        productWithSameName && res.status(405).json({ error: `There's already a product with that name` });
+        if (productWithSameName) return res.status(405).json({ error: `There's already a product with that name` });
 
         if (!name || !image || !description || !price || !categoryId) return res.status(400).json({ error: "Must provide all required fields" });
 
@@ -62,7 +62,7 @@ export async function modifyProduct(req, res) {
     try {
         const foundProduct = await Product.findByPk(id);
 
-        !foundProduct && res.status(204).json({ error: `There are no Products with the id : ${id}` });
+        if (!foundProduct) return res.status(204).json({ error: `There are no Products with the id : ${id}` });
 
         await Product.update(body, { where: { id: id } });
         const updatedProduct = await Product.findByPk(id);
@@ -79,11 +79,11 @@ export async function deleteProduct(req, res) {
     try {
         const foundProduct = await Product.findByPk(id);
 
-        !foundProduct && res.status(204).json({ error: `There are no Products with the id : ${id}` });
+        if (!foundProduct) return res.status(204).json({ error: `There are no Products with the id : ${id}` });
 
         await Product.destroy({ where: { id: id } });
 
-        return res.status(200).json({ msg: `Product id : ${id} deleted` });
+        return res.status(200).json({ msg: `Product ${foundProduct.name} - id : ${id} deleted` });
 
     } catch (err) {
         console.log(err)

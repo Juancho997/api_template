@@ -36,6 +36,6 @@ const Product = databaseConfiguration.databaseInstance.define('products', {
     },
 });
 
-await Product.sync();
+await Product.sync({ alter: true });
 
 export default Product;
