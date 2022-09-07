@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const stage = 'testing'; //process.env.NODE_ENV;
+const stage = 'development'; //process.env.NODE_ENV;
 
 let databaseInstance;
 
@@ -30,7 +30,7 @@ const connectDatabase = async () => {
         const { products, categories } = databaseInstance.models;
 
         categories.hasMany(products, {
-            onDelete: 'cascade'
+            foreignKey: 'categoryId'
         });
 
         products.belongsTo(categories, {
