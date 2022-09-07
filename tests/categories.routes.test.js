@@ -1,10 +1,9 @@
-import 'dotenv/config';
 import { it, expect, describe, afterEach, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 
 import { server } from './../index.js';
 import databaseConfiguration from '../src/database/index.js';
-import { testProduct, testCategory, invalid_ID } from './resources.js';
+import { testCategory, invalid_ID } from './resources.js';
 
 
 beforeAll(async () => {
@@ -14,6 +13,10 @@ beforeAll(async () => {
 afterEach(async () => {
     await databaseConfiguration.databaseInstance.models.categories.truncate({ cascade: true });
 });
+
+afterAll(async () => {
+    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 1');
+})
 
 
 describe('GET /categories', () => {

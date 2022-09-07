@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { it, expect, describe, afterEach, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 
@@ -8,7 +7,6 @@ import { testProduct, testCategory, invalid_ID } from './resources.js';
 
 
 let testCategoryObj;
-
 
 beforeAll(async () => {
     await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }); //allow us to work without foreing key constrains
@@ -21,8 +19,8 @@ afterEach(async () => {
 });
 
 afterAll(async () => {
-    await databaseConfiguration.databaseInstance.models.products.truncate({ cascade: true });
     await databaseConfiguration.databaseInstance.models.categories.truncate({ cascade: true });
+    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 1');
 });
 
 describe('GET /products', () => {
