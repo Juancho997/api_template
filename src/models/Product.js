@@ -26,14 +26,14 @@ const Product = databaseConfiguration.databaseInstance.define('products', {
         type: DataTypes.INTEGER
     },
 
-    categoryId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: 'categories', //the model INSIDE databaseInstance.models. It gets it´s name from the first parameter of the sequelize.define() method.
-            key: 'id'
-        }
-    },
+    // categoryId: {
+    //     type: DataTypes.UUID,
+    //     allowNull: false,
+    //     references: {
+    //         model: 'categories', //the model INSIDE databaseInstance.models. It gets it´s name from the first parameter of the sequelize.define() method.
+    //         key: 'id'
+    //     }
+    // },
 });
 
 await Product.sync({ alter: true });
