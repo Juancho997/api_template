@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const stage = 'testing';
+const stage = 'testing'; //process.env.NODE_ENV;
 
 let databaseInstance;
 
