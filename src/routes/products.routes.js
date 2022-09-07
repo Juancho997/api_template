@@ -15,7 +15,6 @@ const router = Router();
  *         - image
  *         - description
  *         - price
- *         - categoryId
  *         - category
  *       properties:
  *         id:
@@ -33,9 +32,6 @@ const router = Router();
  *         price:
  *           type: integer
  *           description: The product's price 
- *         categoryId:
- *           type: UUID
- *           description: The category's ID referencing an instance of the Category model
  *         category:
  *           type: object
  *           description: The referenced instance of the Category model 
@@ -45,9 +41,9 @@ const router = Router();
  *         image: https://paultan.org/image/2019/01/2019-Renault-Clio-V-18-e1548815807593-1200x661.jpg
  *         description: Clio V
  *         price: 150000
- *         categoryId: 55e26c8f-4f0e-42d2-b096-71f856f5a3ed
- *         updatedAt: 2022-08-28T00:57:21.248Z
  *         createdAt: 2022-08-28T00:57:21.248Z
+ *         updatedAt: 2022-08-28T00:57:21.248Z
+ *         category: Category Object
  */
 
 /**
