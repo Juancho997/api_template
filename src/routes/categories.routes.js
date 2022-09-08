@@ -67,16 +67,16 @@ router.get('/', getCategories);
 /**
  * @swagger
  * /categories/{id}:
- *    get:
- *       summary: Get the category by id and the products belonging to it
- *       tags: [Categories]
- *       parameters:
- *         - in: path
- *           name: id 
- *           schema:
- *             type: string
- *           required: true
- *           description: The category's id.
+ *  get:
+ *    summary: Get the category by id and the products belonging to it
+ *    tags: [Categories]
+ *    parameters:
+ *      - in: path
+ *        name: id 
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The category's id.
  *    responses:
  *      200:
  *        description: The category description by id and it's products
