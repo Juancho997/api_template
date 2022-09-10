@@ -1,7 +1,7 @@
 import { it, expect, describe, afterEach, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 
-import { server } from './../index.js';
+import { server } from '../index.js';
 import databaseConfiguration from '../src/database/index.js';
 import { testProduct, testCategory, invalid_ID } from './resources.js';
 
@@ -9,18 +9,17 @@ import { testProduct, testCategory, invalid_ID } from './resources.js';
 let testCategoryObj;
 
 beforeAll(async () => {
-    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }); //allow us to work without foreing key constrains
+    // await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }); //allow us to work without foreing key constrains
     testCategoryObj = await request(server).post('/categories').send(testCategory);
     testProduct.categoryId = testCategoryObj.body.id;
 });
 
 afterEach(async () => {
-    await databaseConfiguration.databaseInstance.models.products.truncate({ cascade: true });
+    await databaseConfiguration.databaseInstance.models.product.truncate(/*{ cascade: true }*/);
 });
 
 afterAll(async () => {
-    await databaseConfiguration.databaseInstance.models.categories.truncate({ cascade: true });
-    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 1');
+    await databaseConfiguration.databaseInstance.models.category.truncate(/*{ cascade: true }*/);
 });
 
 describe('GET /products', () => {

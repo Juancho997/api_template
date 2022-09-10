@@ -1,22 +1,19 @@
 import { it, expect, describe, afterEach, beforeAll, afterAll } from 'vitest';
 import request from 'supertest';
 
-import { server } from './../index.js';
+import { server } from '../index.js';
 import databaseConfiguration from '../src/database/index.js';
 import { testCategory, invalid_ID } from './resources.js';
 
 
-beforeAll(async () => {
-    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }); //allow us to work without constrains
-});
+// beforeAll(async () => {
+//     await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }); //allow us to work without constrains
+// });
 
 afterEach(async () => {
-    await databaseConfiguration.databaseInstance.models.categories.truncate({ cascade: true });
+    await databaseConfiguration.databaseInstance.models.category.truncate(/*{ cascade: true }*/);
 });
 
-afterAll(async () => {
-    await databaseConfiguration.databaseInstance.query('SET FOREIGN_KEY_CHECKS = 1');
-})
 
 
 describe('GET /categories', () => {
@@ -76,7 +73,7 @@ describe('POST /categories', () => {
 
         const response = await request(server).post('/categories').send(testCategory);
 
-        expect(response).toBeInstanceOf(Object);
+        expect(response.body).toBeInstanceOf(Object);
     });
 
     it('should respond with a 405 status code if the category name its already taken', async () => {
@@ -101,7 +98,7 @@ describe('PUT /products/id', () => {
 
         const response = await request(server).put(`/categories/${id}`).send(body);
 
-        expect(response).instanceOf(Object);
+        expect(response.body).instanceOf(Object);
     });
 
     it('should respond with a 204 status code when provided with an invalid ID', async () => {
@@ -134,9 +131,7 @@ describe('DELETE /products/id', () => {
 
     it('should respond with a 204 status code when provided with an invalid ID', async () => {
 
-        await request(server).post('/categories').send(testCategory);
-
-        const response = await request(server).put(`/categories/${invalid_ID}`).send();
+        const response = await request(server).delete(`/categories/${invalid_ID}`).send();
 
         expect(response.statusCode).toBe(204);
     });

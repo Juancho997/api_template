@@ -1,4 +1,5 @@
 import Category from "../../models/Category.js";
+import Product from "../../models/Product.js";
 
 export async function getCategories(req, res) {
     try {
@@ -16,7 +17,7 @@ export async function getCategories(req, res) {
 export async function getCategoryById(req, res) {
     const { id } = req.params;
     try {
-        const foundCategory = await Category.findByPk(id, { include: ["products"] });
+        const foundCategory = await Category.findByPk(id, { include: Product });
 
         if (!foundCategory) return res.status(204).send({ error: `There are no Categories with the id : ${id}` });
 

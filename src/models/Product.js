@@ -1,7 +1,8 @@
 import { DataTypes } from "sequelize";
+
 import databaseConfiguration from "../database/index.js";
 
-const Product = databaseConfiguration.databaseInstance.define('products', {
+const Product = databaseConfiguration.databaseInstance.define('product', {
 
     id: {
         type: DataTypes.UUID,
@@ -28,17 +29,18 @@ const Product = databaseConfiguration.databaseInstance.define('products', {
 
     categoryId: {
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         references: {
-            model: 'categories', //the model INSIDE databaseInstance.models. It gets it´s name from the first parameter of the sequelize.define() method.
+            model: 'category', //the model INSIDE databaseInstance.models. It gets it´s name from the first parameter of the sequelize.define() method.
             key: 'id'
         }
     },
-}, {
-    defaultScope: {
-        attributes: { exclude: ['categoryId'] }
-    }
+    // }, {
+    //     defaultScope: {
+    //         attributes: { exclude: ['categoryId'] }
+    //     }
 });
 
-await Product.sync();
-// { alter: true }
+await Product.sync({ alter: true });
+
 export default Product;

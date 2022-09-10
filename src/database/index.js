@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-const stage = 'development'; //process.env.NODE_ENV;
+export const stage = 'testing';
 
 let databaseInstance;
 
@@ -24,22 +24,16 @@ const connectDatabase = async () => {
     try {
 
         await databaseInstance.authenticate();
-        console.log(`Database ${process.env.DB_NAME} > CONNECTED`);
 
+        console.log(`Database > CONNECTED`);
 
-        const { products, categories } = databaseInstance.models;
+        const { product, category } = databaseInstance.models;
 
-        categories.hasMany(products, {
-            foreignKey: 'categoryId'
-        });
+        category.hasMany(product);
 
-        products.belongsTo(categories, {
-            foreignKey: 'categoryId',
-            as: 'category'
-        });
+        product.belongsTo(category);
 
         console.log("Tables associations > DONE");
-
 
     } catch (error) {
         console.error('There was an error trying to authenticate the database connection >', error);

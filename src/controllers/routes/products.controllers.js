@@ -1,8 +1,9 @@
 import Product from "../../models/Product.js";
+import Category from "../../models/Category.js";
 
 export async function getProducts(req, res) {
     try {
-        const allProducts = await Product.findAll({ include: ["category"] });
+        const allProducts = await Product.findAll({ include: Category });
 
         if (allProducts.length === 0) return res.status(204).send({ 'msg': 'No products have been found' });
 
@@ -18,7 +19,7 @@ export async function getProductById(req, res) {
     try {
 
         const foundProduct = await Product.findOne({
-            include: 'category',
+            include: Category,
             where: { id: id }
         });
 
