@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-export const stage = 'testing';
+export const stage = 'development';
 
 let databaseInstance;
 
