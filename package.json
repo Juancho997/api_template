@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "vitest --reporter verbose --globals",
+    "test": "vitest --run --reporter verbose --globals",
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
