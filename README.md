@@ -1,5 +1,5 @@
 # api_template
-A simple API REST with integrated documentation and testing.
+A simple 1:M API REST with integrated documentation and testing.
 
 
 
