@@ -126,7 +126,7 @@ router.get('/:id', getProductById);
  *      405:
  *        description: Can not create the product with that name.    
  *      500:
- *        description: Something on the server went wrong. * 
+ *        description: Something on the server went wrong.  
  */
 
 
