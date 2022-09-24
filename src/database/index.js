@@ -1,39 +1,24 @@
 import { Sequelize } from "sequelize";
 
-export const stage = 'development';
+// export const stage = 'development';
 
-let databaseInstance;
+export const databaseInstance = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
+    host: `${process.env.DB_HOST}`,
+    dialect: `${process.env.DB_DIALECT}`
+});
 
-if (stage === 'development') {
+const testDatabaseInstance = new Sequelize(`${process.env.DB_NAME_TESTING}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
+    host: `${process.env.DB_HOST}`,
+    dialect: `${process.env.DB_DIALECT}`
+});
 
-    databaseInstance = new Sequelize(`${process.env.DB_NAME}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
-        host: `${process.env.DB_HOST}`,
-        dialect: `${process.env.DB_DIALECT}`
-    });
 
-} else if (stage === 'testing') {
-
-    databaseInstance = new Sequelize(`${process.env.DB_NAME_TESTING}`, `${process.env.DB_USER}`, `${process.env.DB_PASSWORD}`, {
-        host: `${process.env.DB_HOST}`,
-        dialect: `${process.env.DB_DIALECT}`
-    });
-
-}
-
-const connectDatabase = async () => {
+export const connectDatabase = async (databaseInstance) => {
     try {
 
         await databaseInstance.authenticate();
 
         console.log(`Database > CONNECTED`);
-
-        const { product, category } = databaseInstance.models;
-
-        category.hasMany(product);
-
-        product.belongsTo(category);
-
-        console.log("Tables associations > DONE");
 
     } catch (error) {
         console.error('There was an error trying to authenticate the database connection >', error);
@@ -42,9 +27,29 @@ const connectDatabase = async () => {
 };
 
 
-const databaseConfiguration = {
-    databaseInstance,
-    connectDatabase
-};
+export const associateTables = async (databaseInstance) => {
 
-export default databaseConfiguration;
+    try {
+        const { products, categories } = databaseInstance.models;
+
+        // categories.hasMany(products);
+
+        // products.belongsTo(categories);
+
+
+        categories.hasMany(products, {
+            foreignKey: 'categoryId'
+        });
+
+        products.belongsTo(categories, {
+            foreignKey: 'id',
+            target_key: 'categoryId'
+        })
+
+        console.log("Tables associations > DONE");
+
+    } catch (error) {
+        console.log('There was an error trying to associate the tables >', error);
+        return
+    }
+};

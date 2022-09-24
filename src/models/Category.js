@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 
-import databaseConfiguration from "../database/index.js";
+import { databaseInstance } from "../database/index.js";
 
-const Category = databaseConfiguration.databaseInstance.define('category', {
+const Category = databaseInstance.define('categories', {
 
     id: {
         type: DataTypes.UUID,
@@ -14,10 +14,8 @@ const Category = databaseConfiguration.databaseInstance.define('category', {
     name: {
         type: DataTypes.STRING
     }
+
 });
-
-
-await Category.sync({ alter: true });
 
 
 export default Category;
